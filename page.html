@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Import External JSON</title>
+  
+  <style>
+		ol {
+			margin: 0;
+			padding: 0;
+			list-style-type: none;
+		}
+
+		li {
+      padding: 10px;
+      margin-top: 10px;
+      border-bottom-right-radius: 10px;
+      border-top-right-radius: 10px;
+      width: 20%;
+      box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+                  0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+                  0 12.5px 10px rgba(0, 0, 0, 0.06),
+                  0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+                  0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+                  0 100px 80px rgba(0, 0, 0, 0.12);
+
+      animation: slidein 1.3s linear;
+		}
+
+    @keyframes slidein{
+      0%{
+        margin-left: -700px;
+      }
+      100%{
+        margin-left: 0px;
+      }
+    }
+
+
+    #list{
+      background-color: #42f5d7;
+    }
+
+    h3{
+      margin-top: 0;
+      margin-bottom: 0;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      border-radius: 5px;
+      color: white;
+      width: 100%;
+      text-align: center;
+      background-color: #00bf9f;
+    }
+
+    p{
+      background-color: white;
+      padding: 15px;
+      border-radius: 5px;
+    }
+  </style>
+  
+  <!-- load jquery to use for external json loading -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- load React - note when deploying, replace "development.js" with "production.min.js". -->
+  <script src="https://unpkg.com/react/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom/umd/react-dom.development.js" crossorigin></script>
+
+  <!-- load babel transpiler to convert React's JSX markup to pure JavaScript
+       Note: we only need babel loaded in the browser if we are not using a build system
+       where babel would save pure JS files to be loaded by the browser  -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  
+</head>
+<body>
+  <div id="myApp"></div>
+  <script type="text/babel">
+    "use strict";
+
+    function ProjectList(props){
+        // return some output for the component using JSX
+
+        return <div>
+        <ol>
+          {
+            // use react map() method to loop through the whole array from json
+            // and build individual list item <li> for each item value in the array
+            props.list.map(
+              (item, index) => (
+                <li id="list" key={index}>
+                  <h3>{item.firstname}</h3>
+                  <div>
+                    <p>
+                      {item.description}
+                    </p>
+                    <a href="{item.link}">Visit</a>
+                  </div>
+                </li>
+              )
+            )
+          }
+        </ol>
+      </div>;
+    }
+
+    // jQuery to load JSON
+    $.getJSON("data.json", function(jsonFromJquery){
+      // afterJSON loaded, call react render() to output component into existing element 
+      // render() takes 2 arguments: (1) JSX component, (2) the html element to render into
+
+      ReactDOM.render(
+      <ProjectList list={jsonFromJquery} />,
+      document.getElementById("myApp")
+      
+    
+    );
+  }
+  );
+  </script>
+  
+</body>
+</html>
